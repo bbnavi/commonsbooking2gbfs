@@ -1,0 +1,134 @@
+{
+    "flotte-berlin": {
+        "datasource_dev": "file://data/flotte-berlin.json",
+        "datasource": "https://flotte-berlin.de/lastenrad-ausleihen/standorte/",
+        "pricing_plans": [
+            {
+                "currency": "EUR",
+                "description": "Die Ausleihe ist kostenfrei. Wir freuen uns aber über eine Spende.",
+                "is_taxable": false,
+                "name": "Kostenfrei gegen Spende",
+                "per_km_pricing": [
+                    {
+                        "interval": 1,
+                        "rate": 0.0,
+                        "start": 0
+                    }
+                ],
+                "per_min_pricing": [
+                    {
+                        "interval": 60,
+                        "rate": 0.0,
+                        "start": 0
+                    }
+                ],
+                "plan_id": "kostenfrei",
+                "price": 0,
+                "url": "https://flotte-berlin.de/lastenrad-ausleihen/kostenlos/"
+            }
+        ],
+        "publication_base_url": "https://opendata.bbnavi.de/flotte-berlin",
+        "system_information_data": {
+            "email": "kontakt@flotte-berlin.de",
+            "feed_contact_email": "kontakt@digital-agentur.de",
+            "language": "de",
+            "name": "fLotte Berlin",
+            "operator": "Allgemeiner Deutscher Fahrrad-Club Berlin e.V.",
+            "privacy_url": "https://flotte-berlin.de/datenschutzerklaerung/",
+            "purchase_url": "https://flotte-berlin.de/lastenrad-ausleihen/kostenlos/",
+            "system_id": "flotte-berlin",
+            "terms_last_updated": "2021-10-06",
+            "terms_url": "https://flotte-berlin.de/lastenrad-ausleihen/nutzungsbedingungen/",
+            "timezone": "CET",
+            "url": "https://flotte-berlin.de/"
+        }
+    },
+    "flotte-brandenburg": {
+        "datasource_dev": "file://data/flotte-bb.json",
+        "datasource": "https://flotte-berlin.de/brandenburg/",
+        "pricing_plans": [
+            {
+                "currency": "EUR",
+                "description": "Die Ausleihe ist kostenfrei. Wir freuen uns aber über eine Spende.",
+                "is_taxable": false,
+                "name": "Kostenfrei gegen Spende",
+                "per_km_pricing": [
+                    {
+                        "interval": 1,
+                        "rate": 0.0,
+                        "start": 0
+                    }
+                ],
+                "per_min_pricing": [
+                    {
+                        "interval": 60,
+                        "rate": 0.0,
+                        "start": 0
+                    }
+                ],
+                "plan_id": "kostenfrei",
+                "price": 0,
+                "url": "https://flotte-berlin.de/lastenrad-ausleihen/kostenlos/"
+            }
+        ],
+        "publication_base_url": "https://opendata.bbnavi.de/flotte-brandenburg",
+        "system_information_data": {
+            "email": "flotte@brandenburg.adfc.de",
+            "feed_contact_email": "kontakt@digital-agentur.de",
+            "language": "de",
+            "name": "fLotte Brandenburg",
+            "operator": "Allgemeiner Deutscher Fahrrad-Club Brandenburg e.V.",
+            "privacy_url": "https://flotte-berlin.de/brandenburg/datenschutzerklaerung-bb/",
+            "purchase_url": "https://flotte-berlin.de/lastenrad-ausleihen/kostenlos/",
+            "system_id": "flotte-brandenburg",
+            "terms_last_updated": "2021-04-18",
+            "terms_url": "https://flotte-berlin.de/brandenburg/nutzungsbedingungen-bb/",
+            "timezone": "CET",
+            "url": "http://www.flotte-brandenburg.de/"
+        }
+    },
+    "flotte-potsdam": {
+        "datasource_dev": "file://data/flotte-potsdam.json",
+        "datasource": "https://flotte-potsdam.de/lastenrad-ausleihen/standorte/",
+        "pricing_plans": [
+            {
+                "currency": "EUR",
+                "description": "Die Ausleihe ist kostenfrei. Wir freuen uns aber über eine Spende.",
+                "is_taxable": false,
+                "name": "Kostenfrei gegen Spende",
+                "per_km_pricing": [
+                    {
+                        "interval": 1,
+                        "rate": 0.0,
+                        "start": 0
+                    }
+                ],
+                "per_min_pricing": [
+                    {
+                        "interval": 60,
+                        "rate": 0.0,
+                        "start": 0
+                    }
+                ],
+                "plan_id": "kostenfrei",
+                "price": 0,
+                "url": "https://flotte-berlin.de/lastenrad-ausleihen/kostenlos/"
+            }
+        ],
+        "publication_base_url": "https://opendata.bbnavi.de/flotte-potsdam",
+        "system_information_data": {
+            "email": "team@flotte-potsdam.de",
+            "feed_contact_email": "kontakt@digital-agentur.de",
+            "language": "de",
+            "name": "fLotte Potsdam",
+            "operator": "Verein zur Förderung innovativer Wohn- und Lebensformen e.V.",
+            "privacy_url": "https://flotte-potsdam.de/ueber-uns/datenschutzerklaerung/",
+            "purchase_url": "https://flotte-potsdam.de/lastenrad-ausleihen/kostenlos/",
+            "system_id": "flotte-potsdam",
+            "terms_last_updated": "2021-10-06",
+            "terms_url": "https://flotte-potsdam.de/lastenrad-ausleihen/nutzungsbedingungen/",
+            "timezone": "CET",
+            "url": "https://flotte-potsdam.de/"
+        }
+    }
+}

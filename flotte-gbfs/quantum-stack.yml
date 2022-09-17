@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  publish-flotte-gbfs:
+    image: registry.gitlab.tpwd.de/tpwd/bb-navi/publish-flotte-gbfs
+    environment:
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:?missing env var MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:?missing env var MINIO_SECRET_KEY}
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == node-001.tpwd-bb-navi
+    networks:
+      - public
+
+networks:
+  public:
+    external: true
