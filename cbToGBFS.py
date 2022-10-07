@@ -262,7 +262,7 @@ class CommonsBookingDataSource():
 				'last_reported': default_last_reported
 			}
 
-			self.update_availability_status(status, vehicles.values())
+		self.update_availability_status(status, vehicles.values())
 
 		
 		return list(infos.values()), list(status.values()), vehicle_types, vehicles
