@@ -16,6 +16,7 @@ logging.getLogger().setLevel(logging.DEBUG)
 logger = logging.getLogger("cbToGBFS")
 
 DEFAULT_MAX_RANGE_METERS = 30000
+USER_AGENT = 'cb2GTFS'
 
 class CommonsBookingDataSource():
 	api = "commons-booking"
@@ -39,7 +40,7 @@ class CommonsBookingDataSource():
 			"action": "cb_map_locations"
 		}
 
-		res = requests.post(cb_map_settings["data_url"], data=data, headers={"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"})
+		res = requests.post(cb_map_settings["data_url"], data=data, headers={'User-Agent': USER_AGENT, "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"})
 		return res.json()
 
 	def get_data(self, url):
@@ -47,7 +48,7 @@ class CommonsBookingDataSource():
 			with open(url[7:]) as f:
 				return json.load(f)
 		else:
-			res = requests.get(url)
+			res = requests.get(url, headers = {'User-Agent': USER_AGENT})
 			if res.status_code == 200:
 				response = res.text
 				cb_settings_assignment = "cb_map.settings = "
