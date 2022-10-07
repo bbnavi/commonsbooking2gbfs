@@ -269,7 +269,7 @@ class CommonsBookingDataSource():
 
 class GbfsWriter():
 
-	def write_gbfs_file(self, filename, data, timestamp, ttl=60 ):
+	def write_gbfs_file(self, filename, data, timestamp, ttl=1800 ):
 		with open(filename, "w") as dest:
 			content = {
 				"data": data,
