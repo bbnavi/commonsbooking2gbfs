@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 import requests
 import logging
 from pathlib import Path
-
+import urllib.parse
 
 logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
@@ -122,7 +122,7 @@ class CommonsBookingDataSource():
 			'name': item['short_desc'].strip(),
 			'return_type': 'roundtrip',
 			'default_pricing_plan_id': 'kostenfrei',
-			'vehicle_image': item['thumbnail'],
+			'vehicle_image': urllib.parse.quote(item['thumbnail']) if 'thumbnail' in item and item['thumbnail'] else None,
 		}
 		
 		vehicle_id = '{}_{}'.format(item['id'], item['name'])
