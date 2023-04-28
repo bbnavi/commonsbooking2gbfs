@@ -208,8 +208,11 @@ class CommonsBookingDataSource():
 				stations[station_id]["num_bikes_available"] += 1
 			
 		for station_id in stations:
-			status = stations_status[station_id]
+			if station_id in stations_status:
+				status = stations_status[station_id] if station_id in stations_status else {}	
 			stations[station_id]['vehicle_types_available'] = [ {"vehicle_type_id": x, "count": status[x]} for x in status]
+			else:
+				stations[station_id]['vehicle_types_available'] = []
 
 	def load_stations(self, datasource):
 		infos = {}
