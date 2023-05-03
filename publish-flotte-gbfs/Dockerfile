@@ -11,7 +11,7 @@ RUN apk add --no-cache --update tree
 # install MinIO client a.k.a. mc
 COPY --from=mc /usr/bin/mc /usr/bin/mc
 
-COPY main.sh ./
+COPY *.sh ./
 COPY index.html flotte-*-logo.png ./
 
 # prevent inheriting `python` as entrypoint

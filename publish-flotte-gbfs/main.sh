@@ -15,9 +15,9 @@ fi
 # default: 15 minutes
 PUBLISH_INTERVAL="${PUBLISH_INTERVAL:-900}"
 
-export MC_HOST_bbnavi="https://$MINIO_ACCESS_KEY:$MINIO_SECRET_KEY@opendata.bbnavi.de"
-
-dir="$(mktemp -d -t flotte-gbfs.XXXXXX)"
+export MC_HOST_bbnavi=${MC_HOST_bbnavi:-"https://$MINIO_ACCESS_KEY:$MINIO_SECRET_KEY@opendata.bbnavi.de"}
+export GBFS_BASE_URL=https://opendata.bbnavi.de/flotte
+export GBFS_TMP_DIR="$(mktemp -d -t flotte-gbfs.XXXXXX)"
 
 set -x
 
@@ -27,11 +27,5 @@ while true; do
 	# We sleep first so that, if the GBFS generation fails constantly, we don't DOS the fLotte API.
 	sleep "$PUBLISH_INTERVAL"
 
-	python cbToGBFS.py \
-		--baseUrl 'https://opendata.bbnavi.de/flotte' \
-		--outputDir "$dir" \
-
-	tree -sh "$dir"
-
-	mc cp -q -r $dir/* bbnavi/flotte/
+	./publish.sh 'bbnavi/flotte'
 done
