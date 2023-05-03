@@ -122,7 +122,7 @@ class CommonsBookingDataSource():
 			'name': item['short_desc'].strip(),
 			'return_type': 'roundtrip',
 			'default_pricing_plan_id': 'kostenfrei',
-			'vehicle_image': urllib.parse.quote(item['thumbnail']) if 'thumbnail' in item and item['thumbnail'] else None,
+			'vehicle_image': urllib.parse.quote(item['thumbnail'], safe='/:') if 'thumbnail' in item and item['thumbnail'] else None,
 		}
 		
 		vehicle_id = '{}_{}'.format(item['id'], item['name'])
