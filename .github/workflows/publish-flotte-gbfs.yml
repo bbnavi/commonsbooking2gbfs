@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -20,16 +20,44 @@ jobs:
       with:
         context: .
         tags: commonsbooking2gbfs
-    - name: build & publish publish-flotte-gbfs Docker image
-      uses: docker/build-push-action@v2
+    - name: build publish-flotte-gbfs Docker image
+      uses: docker/build-push-action@v4
       with:
         context: publish-flotte-gbfs
-        push: true
+        load: true
         tags: registry.gitlab.tpwd.de/tpwd/bb-navi/publish-flotte-gbfs
+
+    - name: set up temporary local minIO instance
+      run: |
+        # create network to connect the containers
+        docker network create --attachable test
+        # start minIO
+        docker run --rm -d --name minio \
+          -p 9000:9000 --network test \
+          -e 'MINIO_ROOT_USER=some-user' -e 'MINIO_ROOT_PASSWORD=some-password' \
+          quay.io/minio/minio server /data
+        sleep 1
+        # create bucket
+        docker run --rm -i \
+          --network test -e 'MC_HOST_bbnavi=http://some-user:some-password@minio:9000' \
+          quay.io/minio/mc \
+          mb bbnavi/flotte
+    - name: test publish-flotte-gbfs with local minIO instance
+      run: |
+        # $MINIO_ACCESS_KEY & $MINIO_SECRET_KEY are not needed here, but publish.sh expects them.
+        # todo: make this a regular test shell script
+        docker run --rm -i \
+          --network test -e 'MC_HOST_bbnavi=http://some-user:some-password@minio:9000' \
+          -e GBFS_TMP_DIR=/tmp/gbfs \
+          -e MINIO_ACCESS_KEY=foo -e MINIO_SECRET_KEY=bar \
+          registry.gitlab.tpwd.de/tpwd/bb-navi/publish-flotte-gbfs \
+          /bin/sh publish.sh bbnavi/flotte
+
+
   deploy:
     runs-on: ubuntu-latest
     needs:
-      - build
+      - build-test
     container: r.planetary-quantum.com/quantum-public/cli:2
     env:
       QUANTUM_USER: "${{ secrets.QUANTUM_USER }}"
@@ -40,6 +68,12 @@ jobs:
       MINIO_SECRET_KEY: "${{ secrets.MINIO_SECRET_KEY }}"
     steps:
       - uses: actions/checkout@v2
+      - name: publish publish-flotte-gbfs Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: publish-flotte-gbfs
+          push: true
+          tags: registry.gitlab.tpwd.de/tpwd/bb-navi/publish-flotte-gbfs
       # https://twitter.com/derhuerst/status/1511660213111336961
       - name: inline env vars to work around quantum-cli support
         run: |
