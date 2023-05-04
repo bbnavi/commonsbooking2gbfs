@@ -237,12 +237,6 @@ class CommonsBookingDataSource():
 			if station_opening_hours:
 				station['station_opening_hours'] = station_opening_hours
 
-			station_link = elem.get('location_link')
-			if station_link:
-				station['rental_uris'] = {
-					'web': station_link
-				}
-
 			infos[station_id] = station
 
 			station_vehicles, station_vehicle_types = self.extract_from_vehicles(elem['items'], station_id, default_last_reported)
@@ -266,6 +260,19 @@ class CommonsBookingDataSource():
 				'last_reported': default_last_reported
 			}
 		
+			station_link = elem.get('location_link')
+			if station_link:
+				station['rental_uris'] = {
+					'web': station_link
+				}
+			else:
+				# in case no station link is provided, we return the link to the first vehicle, if provided
+				# here we assume, that for most stations, just one vehicle is offered. 
+				# A possible optimization: in case there are more bikes available, prefere a available one
+				if len(station_vehicles) > 0:
+					vehicle = next(iter(station_vehicles.values()))
+					station['rental_uris'] = vehicle['rental_uris']
+
 		return list(infos.values()), list(status.values()), vehicle_types, vehicles
 
 class GbfsWriter():
