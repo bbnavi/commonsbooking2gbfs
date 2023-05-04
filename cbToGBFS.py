@@ -188,31 +188,26 @@ class CommonsBookingDataSource():
 
 		return ','.join(opening_days)
 
-	def update_availability_status(data, stations, vehicles):
-		stations_status = {}
+	def extract_vehicle_availabilty(self, vehicles):
+		"""
+		Iterates over all vehicles and returns GBFS style vehicle_availabilty array
+
+		Parameters
+		----------
+		vehicles : list 
+			list of vehicles (GBFS style dicts) potentially available at this station
+		"""
+		status = {}
 		for vehicle in vehicles:
 			vehicle_id = vehicle['bike_id']
 			
-		
-			station_id = vehicle['station_id']
-			status = stations_status.get(station_id)
-			if not status:
-				status = {}
-				stations_status[station_id] = status
-
 			vehicle_type_id = vehicle['vehicle_type_id']
 			if not status.get(vehicle_type_id):
 				status[vehicle_type_id] = 0
 			if not vehicle['is_reserved'] and not vehicle['is_disabled']:
 				status[vehicle_type_id] += 1
-				stations[station_id]["num_bikes_available"] += 1
 			
-		for station_id in stations:
-			if station_id in stations_status:
-				status = stations_status[station_id] if station_id in stations_status else {}	
-				stations[station_id]['vehicle_types_available'] = [ {"vehicle_type_id": x, "count": status[x]} for x in status]
-			else:
-				stations[station_id]['vehicle_types_available'] = []
+		return [{"vehicle_type_id": x, "count": status[x]} for x in status]
 
 	def load_stations(self, datasource):
 		infos = {}
@@ -223,7 +218,7 @@ class CommonsBookingDataSource():
 		default_last_reported = int(datetime.timestamp(datetime.now()))
 
 		stations = self.get_data(datasource)
-        
+
 		for elem in stations:
 			station_id = elem['location_name']
 			station = {
@@ -252,21 +247,24 @@ class CommonsBookingDataSource():
 
 			station_vehicles, station_vehicle_types = self.extract_from_vehicles(elem['items'], station_id, default_last_reported)
 
+			# TODO: station_vehicles can contain same vehicle as already received for other station
+			# currently, one of these is overridden. This should be handled better, e.g. retaining the one which
+			# is available
 			vehicles = vehicles | station_vehicles
 			vehicle_types = vehicle_types | station_vehicle_types
 
+			vehicle_types_available = self.extract_vehicle_availabilty(station_vehicles.values())
+			num_bikes_available = sum(map(lambda x: x["count"], vehicle_types_available))
+
 			status[station_id] = {
-				"num_bikes_available": 0,
-				"vehicle_types_available": [],
+				"num_bikes_available": num_bikes_available,
+				"vehicle_types_available": vehicle_types_available,
 				"is_renting": True,
 				"is_installed": True,
 				"is_returning": True,
 				'station_id': station_id,
 				'last_reported': default_last_reported
 			}
-
-		self.update_availability_status(status, vehicles.values())
-
 		
 		return list(infos.values()), list(status.values()), vehicle_types, vehicles
 
