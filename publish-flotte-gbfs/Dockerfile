@@ -1,7 +1,7 @@
 # This Dockerfile builds a service that regularly publishes the fLotte GBFS feeds to the bbnavi open data portal.
 FROM minio/mc as mc
 
-FROM commonsbooking2gbfs
+FROM ghcr.io/bbnavi/commonsbooking2gbfs
 
 ENV MINIO_ACCESS_KEY="" MINIO_SECRET_KEY=""
 ENV PUBLISH_INTERVAL=""
