@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  publish-flotte-gbfs:
+    image: ghcr.io/bbnavi/publish-flotte-gbfs
+    environment:
+      MINIO_ACCESS_KEY: "${{ secrets.OPENDATA_KEY }}"
+      MINIO_SECRET_KEY: "${{ secrets.OPENDATA_SECRET }}"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == worker
+    networks:
+      - public
+
+networks:
+  public:
+    external: true

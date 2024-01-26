@@ -53,32 +53,16 @@ jobs:
           ghcr.io/bbnavi/publish-flotte-gbfs \
           /bin/sh publish.sh bbnavi/flotte
 
-    # https://twitter.com/derhuerst/status/1511660213111336961
-    # - name: inline env vars to work around quantum-cli support
-    #   env:
-    #     MINIO_ACCESS_KEY: "${{ secrets.MINIO_ACCESS_KEY }}"
-    #     MINIO_SECRET_KEY: "${{ secrets.MINIO_SECRET_KEY }}"
-    #   run: |
-    #     cd publish-flotte-gbfs
-    #     sudo apt install -y moreutils
-    #     docker-compose -f quantum-stack.yml config | sponge quantum-stack.yml
-
-    # - name: publish publish-flotte-gbfs Docker image
-    #   uses: docker/build-push-action@v4
-    #   with:
-    #     context: publish-flotte-gbfs
-    #     push: true
-    #     tags: registry.gitlab.tpwd.de/tpwd/bb-navi/publish-flotte-gbfs
-    # - name: deploy to bbnavi infrastructure
-    #   env:
-    #     QUANTUM_USER: "${{ secrets.QUANTUM_USER }}"
-    #     QUANTUM_PASSWORD: "${{ secrets.QUANTUM_PASSWORD }}"
-    #     QUANTUM_ENDPOINT: "tpwd-bb-navi"
-    #     QUANTUM_STACK: "publish-flotte-gbfs-tpwd-bb-navi"
-    #   run: |
-    #     cd publish-flotte-gbfs
-    #     docker run --rm -i \
-    #       -v $PWD:/app -w /app \
-    #       -e QUANTUM_USER -e QUANTUM_PASSWORD -e QUANTUM_ENDPOINT -e QUANTUM_STACK \
-    #       r.planetary-quantum.com/quantum-public/cli:2 \
-    #       quantum-cli stacks update --create --wait
+      deploy:
+        runs-on: [self-hosted, deploy]
+        needs:
+          - build-test-deploy
+        env:
+          MOQO_ACCESS_TOKEN: "${{ secrets.MOQO_ACCESS_TOKEN }}"
+          MINIO_ACCESS_KEY: "${{ secrets.OPENDATA_KEY }}"
+          MINIO_SECRET_KEY: "${{ secrets.OPENDATA_SECRET }}"
+        steps: 
+          - uses: actions/checkout@v2
+          - name: Deploy Stack
+            run: |
+              docker stack deploy --compose-file ./docker-compose.yml commonsbooking2gbfs
