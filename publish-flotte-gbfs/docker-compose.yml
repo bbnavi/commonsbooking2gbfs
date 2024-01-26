@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   publish-flotte-gbfs:
-    image: ghcr.io/bbnavi/commonbookings2gbfs:main
+    image: ghcr.io/bbnavi/publish-flotte-gbfs:main
     environment:
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY:?missing env var MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY:?missing env var MINIO_SECRET_KEY}
