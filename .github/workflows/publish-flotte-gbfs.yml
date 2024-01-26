@@ -50,7 +50,7 @@ jobs:
           --network test -e 'MC_HOST_bbnavi=http://some-user:some-password@minio:9000' \
           -e GBFS_TMP_DIR=/tmp/gbfs \
           -e MINIO_ACCESS_KEY=foo -e MINIO_SECRET_KEY=bar \
-          registry.gitlab.tpwd.de/tpwd/bb-navi/publish-flotte-gbfs \
+          ghcr.io/bbnavi/publish-flotte-gbfs \
           /bin/sh publish.sh bbnavi/flotte
 
     # https://twitter.com/derhuerst/status/1511660213111336961
