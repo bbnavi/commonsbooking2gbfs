@@ -20,12 +20,19 @@ jobs:
       with:
         context: .
         tags: ghcr.io/bbnavi/commonsbooking2gbfs
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
     - name: build publish-flotte-gbfs Docker image
       uses: docker/build-push-action@v4
       with:
-        context: publish-flotte-gbfs
-        load: true
-        tags: ghcr.io/bbnavi/publish-flotte-gbfs
+        context: publish-barshare-gbfs
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
 
     - name: set up temporary local minIO instance
       run: |
@@ -50,7 +57,7 @@ jobs:
           --network test -e 'MC_HOST_bbnavi=http://some-user:some-password@minio:9000' \
           -e GBFS_TMP_DIR=/tmp/gbfs \
           -e MINIO_ACCESS_KEY=foo -e MINIO_SECRET_KEY=bar \
-          ghcr.io/bbnavi/publish-flotte-gbfs \
+          ghcr.io/bbnavi/publish-flotte-gbfs:main \
           /bin/sh publish.sh bbnavi/flotte
 
   deploy:
