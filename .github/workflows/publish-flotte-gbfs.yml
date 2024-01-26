@@ -5,6 +5,7 @@ on:
     branches:
       - main
 
+      
 jobs:
   build-test-deploy:
     runs-on: ubuntu-latest
@@ -24,20 +25,13 @@ jobs:
         context: .
         tags: ghcr.io/bbnavi/commonsbooking2gbfs
 
-    - name: Extract metadata (tags, labels) for Docker
-      id: meta
-      uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-      with:
-        images: ${{ env.REGISTRY }}/publish-flotte-gbfs
     
     - name: build publish-flotte-gbfs Docker image
       uses: docker/build-push-action@v4
       with:
         context: publish-flotte-gbfs
-        load: true
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+        tags: ghcr.io/bbnavi/publish-flotte-gbfs
 
     - name: set up temporary local minIO instance
       run: |
